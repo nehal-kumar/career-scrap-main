@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Career Assistant</title>
+{% endblock %}
+
+{% block navbar %}
+<form class="d-flex" role="search" action="/" method="POST">
+    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" id="search"
+           value={{search}}>
+    <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-around flex-wrap mb-10">
+    {% for job in jobs %}
+    <div class="card mt-4 career-card">
+        <div class="row g-0">
+            <div class="col-md-3 d-flex align-items-center p-2">
+                <img src={{job.logo}} class="card-img-top" alt={{job.company}}>
+            </div>
+            <div class="col-md-9">
+                <div class="card-body">
+                    <h5 class="card-title">{{job.title}}</h5>
+                    <p class="card-text">{{job.location}}</p>
+                    <a href={{job.url}} target="_blank" rel="noopener noreferrer" class="btn btn-primary">Apply</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block footer %}
+<div class="d-flex justify-content-center p-4">
+    <nav>
+        <ul class="pagination">
+            {% if 0 < page %}
+            <li class="page-item">
+                <a class="page-link" href={{url_for('home', search=search, page=(page-1))}}>Previous</a>
+            </li>
+            {% endif %}
+
+            {% for i in range([0,page-4] | max, [page+4+1, total] | min) %}
+            <li class="page-item {% if i == page %} active {% endif %}"><a class="page-link"
+                                                                           href={{url_for('home', search=search, page=i)}}>{{i}}</a>
+            </li>
+            {% endfor %}
+
+            {% if page < total - 1 %}
+            <li class="page-item">
+                <a class="page-link" href={{url_for('home', search=search, page=(page+1))}}>Next</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+
+{% endblock %}
